@@ -1,0 +1,33 @@
+{% extends "_layouts/default.njk" %}
+
+{% block body %}
+<div class="content">
+  <strong>Seus agendamentos</strong>
+
+  <!--<div class="provider">
+    <div>
+      <img src="/file/{{ provider.avatar }}" />
+      <strong>{{ provider.name }}</strong>
+    </div>
+  </div>-->
+
+  <div>
+    <input type="text" class="flatpickr" placeholder="Escolha uma data" />
+    <div id="appointments">
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  flatpickr('.flatpickr',{
+    dateFormat: 'd/m/Y',
+    onChange: function (date) {
+      fetch(`/app/appointments/show/{{ provider.id }}?date=${date[0].getTime()}`).then(function(response){
+        response.text().then(function (html) {
+          document.getElementById('appointments').innerHTML = html
+        })
+      })
+    }
+  })
+</script>
+{% endblock %}
